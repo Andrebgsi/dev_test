@@ -1,5 +1,8 @@
 USE test_db;
 
---TODO Crie a tabela de user;
-
---TODO Crie a tabela de posts;
+CREATE TABLE IF NOT EXISTS user (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    firstName VARCHAR(100) NOT NULL,
+    lastName VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL
+);
