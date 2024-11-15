@@ -48,7 +48,23 @@ app.post('/users', async (req, res) => {
 });
 
 app.post('/posts', async (req, res) => {
-  // Crie o endpoint de posts
+  const { title, description, userId } = req.body;
+  const postRepository = AppDataSource.getRepository(Post);
+  const userRepository = AppDataSource.getRepository(User);
+
+  try {
+    const user = await userRepository.findOneBy({ id: userId });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const newPost = postRepository.create({ title, description, user });
+    await postRepository.save(newPost);
+    res.status(201).json(newPost);
+  } catch (error) {
+    console.error("Error creating post:", error);
+    res.status(500).json({ message: "Error creating post" });
+  }
 });
 
 const PORT = process.env.PORT || 3000;
