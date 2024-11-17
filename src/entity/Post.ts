@@ -4,14 +4,14 @@ import { User } from "./User";
 @Entity()
 export class Post {
   @PrimaryGeneratedColumn()
-  id: number | undefined;
+  id!: number;
 
-  @Column({ type: "varchar", length: 100 })
-  title: string | undefined;
+  @Column({ type: "varchar", length: 100, nullable: false })
+  title!: string;
 
-  @Column({ type: "varchar", length: 100 })
-  description: string | undefined;
+  @Column({ type: "varchar", length: 100, nullable: false })
+  description!: string;
 
-  @ManyToOne(() => User, (user) => user.posts, { onDelete: "CASCADE" })
-  user: User | undefined;
+  @ManyToOne(() => User, (user) => user.posts, { nullable: false, onDelete: "CASCADE" })
+  user!: User;
 }
