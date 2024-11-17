@@ -45,5 +45,5 @@ export const deletePost = async (req: Request, res: Response) => {
   const post = await postRepository.findOneBy({ id: postId });
   if (!post) return res.status(404).json({ error: "Post not found" });
   await postRepository.remove(post);
-  res.status(204).send({ message: "User deleted successfully. User Id:", postId });
+  res.status(204).send({ message: "Post deleted successfully. Post Id:", postId });
 };
