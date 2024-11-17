@@ -1,44 +1,77 @@
 import { Request, Response } from "express";
-import { AppDataSource } from "../data-source";
-import { User } from "../entity/User";
+import { UserService } from "../services/user.service";
 
-const userRepository = AppDataSource.getRepository(User);
+export class UserController {
+  static async createUser(req: Request, res: Response) {
+    try {
+      const { firstName, lastName, email } = req.body;
+      if (!firstName || !lastName || !email) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
 
-export const getUsers = async (_req: Request, res: Response) => {
-  const users = await userRepository.find({ relations: ["posts"] });
-  res.json(users);
-};
-
-export const getUserById = async (req: Request, res: Response) => {
-  const user = await userRepository.findOne({ where: { id: +req.params.id }, relations: ["posts"] });
-  if (!user) return res.status(404).json({ error: "User not found" });
-  res.json(user);
-};
-
-export const createUser = async (req: Request, res: Response) => {
-  const { firstName, lastName, email } = req.body;
-  try {
-    const newUser = userRepository.create({ firstName, lastName, email });
-    await userRepository.save(newUser);
-    res.status(201).json(newUser);
-  } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ message: "Error creating user" });
+      const newUser = await UserService.createUser({ firstName, lastName, email });
+      return res.status(201).json(newUser);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Error creating user" });
+    }
   }
-};
 
-export const updateUser = async (req: Request, res: Response) => {
-  const user = await userRepository.findOneBy({ id: +req.params.id });
-  if (!user) return res.status(404).json({ error: "User not found" });
-  userRepository.merge(user, req.body);
-  await userRepository.save(user);
-  res.json(user);
-};
+  static async getAllUsers(req: Request, res: Response) {
+    try {
+      const users = await UserService.getAllUsers();
+      return res.status(200).json(users);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Error fetching users" });
+    }
+  }
 
-export const deleteUser = async (req: Request, res: Response) => {
-  const userId = +req.params.id;
-  const user = await userRepository.findOneBy({ id: userId });
-  if (!user) return res.status(404).json({ error: "User not found" });
-  await userRepository.remove(user);
-  res.status(204).send({ message: "User deleted successfully. User Id:", userId });
-};
+  static async getUserById(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const user = await UserService.getUserById(Number(id));
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      return res.status(200).json(user);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Error fetching user" });
+    }
+  }
+
+  static async updateUser(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const updatedUser = await UserService.updateUser(Number(id), req.body);
+
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      return res.status(200).json(updatedUser);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Error updating user" });
+    }
+  }
+
+  static async deleteUser(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const success = await UserService.deleteUser(Number(id));
+
+      if (!success) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      return res.status(204).send();
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Error deleting user" });
+    }
+  }
+}
