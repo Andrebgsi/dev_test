@@ -6,6 +6,11 @@ import { User } from "../entity/User";
 const postRepository = AppDataSource.getRepository(Post);
 const userRepository = AppDataSource.getRepository(User);
 
+export const getPosts = async (req: Request, res: Response) => {
+  const posts = await postRepository.find({ relations: ["user"] });
+  res.json(posts);
+};
+
 export const createPost = async (req: Request, res: Response) => {
   const { title, description, userId } = req.body;
   try {
