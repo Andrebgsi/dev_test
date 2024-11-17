@@ -11,6 +11,12 @@ export const getPosts = async (req: Request, res: Response) => {
   res.json(posts);
 };
 
+export const getPostById = async (req: Request, res: Response) => {
+  const post = await postRepository.findOne({ where: { id: +req.params.id }, relations: ["user"] });
+  if (!post) return res.status(404).json({ error: "Post not found" });
+  res.json(post);
+};
+
 export const createPost = async (req: Request, res: Response) => {
   const { title, description, userId } = req.body;
   try {
