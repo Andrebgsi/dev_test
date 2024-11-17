@@ -6,15 +6,18 @@
 ### Estrutura do Projeto:
 ```dotnetcli
 src/
-├── Entity/
+├── controllers/
+│   ├── userController.ts
+│   └── postController.ts
+├── entity/
 │   ├── User.ts
 │   └── Post.ts
 ├── routes/
 │   ├── userRoutes.ts
 │   └── postRoutes.ts
-├── controllers/
-│   ├── userController.ts
-│   └── postController.ts
+├── services/
+│   ├── userService.ts
+│   └── postService.ts
 ├── data-source.ts
 ├── deb.test.ts
 ├── index.ts
@@ -197,6 +200,31 @@ Crie um Pull Request para a brach master nos enviando o código
 ✅ Realizado
 
 
+## 🎁 Extras: Criação do CRUD complementar:
+
+para complentar o desafio, criei o restante do CRUD basico
+
+```dotnetcli
+CRUD de Posts:
+
+getAllPosts: Listar todos os posts
+getPostById: Obter um post pelo ID
+createPost: Criar um novo post
+updatePost: Atualizar um post pelo ID
+deletePost: Deletar um post pelo ID
+```
+
+```dotnetcli
+CRUD de Users:
+
+createUser: Criar um novo usuario
+getAllUsers: Listar todos os Usuarios
+getUserById: Obter um usuario pelo ID
+updateUser: Atualizar um usuario pelo ID
+deleteUser: Deletar um usuario pelo ID
+```
+
+Proximos passos: Teste e regras de negocios no middleware
 
 # Conclusão
 
