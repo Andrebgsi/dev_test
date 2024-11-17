@@ -9,6 +9,12 @@ export const getUsers = async (_req: Request, res: Response) => {
   res.json(users);
 };
 
+export const getUserById = async (req: Request, res: Response) => {
+  const user = await userRepository.findOne({ where: { id: +req.params.id }, relations: ["posts"] });
+  if (!user) return res.status(404).json({ error: "User not found" });
+  res.json(user);
+};
+
 export const createUser = async (req: Request, res: Response) => {
   const { firstName, lastName, email } = req.body;
   try {
