@@ -8,10 +8,15 @@ const userRepository = AppDataSource.getRepository(User);
 
 export const createPost = async (req: Request, res: Response) => {
   const { title, description, userId } = req.body;
-  const user = await userRepository.findOneBy({ id: userId });
-  if (!user) return res.status(404).json({ error: "User not found" });
+  try {
+    const user = await userRepository.findOneBy({ id: userId });
+    if (!user) return res.status(404).json({ error: "User not found" });
 
-  const post = postRepository.create({ title, description, user });
-  await postRepository.save(post);
-  res.status(201).json(post);
+    const newPost = postRepository.create({ title, description, user });
+    await postRepository.save(newPost);
+    res.status(201).json(newPost);
+  } catch (error) {
+    console.error("Error creating post:", error);
+    res.status(500).json({ message: "Error creating post" });
+  }
 };
