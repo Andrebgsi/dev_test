@@ -36,8 +36,9 @@ export const updateUser = async (req: Request, res: Response) => {
 };
 
 export const deleteUser = async (req: Request, res: Response) => {
-  const user = await userRepository.findOneBy({ id: +req.params.id });
+  const userId = +req.params.id;
+  const user = await userRepository.findOneBy({ id: userId });
   if (!user) return res.status(404).json({ error: "User not found" });
   await userRepository.remove(user);
-  res.status(204).send();
+  res.status(204).send({ message: "User deleted successfully. User Id:", userId });
 };
