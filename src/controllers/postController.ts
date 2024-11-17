@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PostService } from "../services/post.service";
+import { PostService } from "../services/postService";
 
 export class PostController {
   static async createPost(req: Request, res: Response) {
