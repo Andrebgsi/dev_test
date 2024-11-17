@@ -26,3 +26,11 @@ export const createUser = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error creating user" });
   }
 };
+
+export const updateUser = async (req: Request, res: Response) => {
+  const user = await userRepository.findOneBy({ id: +req.params.id });
+  if (!user) return res.status(404).json({ error: "User not found" });
+  userRepository.merge(user, req.body);
+  await userRepository.save(user);
+  res.json(user);
+};
