@@ -39,3 +39,10 @@ export const updatePost = async (req: Request, res: Response) => {
   await postRepository.save(post);
   res.json(post);
 };
+
+export const deletePost = async (req: Request, res: Response) => {
+  const post = await postRepository.findOneBy({ id: +req.params.id });
+  if (!post) return res.status(404).json({ error: "Post not found" });
+  await postRepository.remove(post);
+  res.status(204).send();
+};
