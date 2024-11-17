@@ -31,3 +31,11 @@ export const createPost = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error creating post" });
   }
 };
+
+export const updatePost = async (req: Request, res: Response) => {
+  const post = await postRepository.findOneBy({ id: +req.params.id });
+  if (!post) return res.status(404).json({ error: "Post not found" });
+  postRepository.merge(post, req.body);
+  await postRepository.save(post);
+  res.json(post);
+};
