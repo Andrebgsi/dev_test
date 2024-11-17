@@ -4,9 +4,8 @@ import userRoutes from "./routes/userRoutes";
 import postRoutes from "./routes/postRoutes";
 
 const app = express();
+
 app.use(express.json());
-
-
 
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
