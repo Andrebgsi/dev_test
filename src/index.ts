@@ -1,6 +1,6 @@
 import express from 'express';
 import { AppDataSource } from "./data-source";
-import { User } from './entity/User';
+import userRoutes from "./routes/userRoutes";
 import postRoutes from "./routes/postRoutes";
 
 const app = express();
@@ -23,20 +23,8 @@ const initializeDatabase = async () => {
 
 initializeDatabase();
 
-app.post('/users', async (req, res) => {
-  const { firstName, lastName, email } = req.body;
-  const userRepository = AppDataSource.getRepository(User);
-
-  try {
-    const newUser = userRepository.create({ firstName, lastName, email });
-    await userRepository.save(newUser);
-    res.status(201).json(newUser);
-  } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ message: "Error creating user" });
-  }
-});
-
+// Rotas
+app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 
 const PORT = process.env.PORT || 3000;
