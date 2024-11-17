@@ -4,6 +4,11 @@ import { User } from "../entity/User";
 
 const userRepository = AppDataSource.getRepository(User);
 
+export const getUsers = async (_req: Request, res: Response) => {
+  const users = await userRepository.find({ relations: ["posts"] });
+  res.json(users);
+};
+
 export const createUser = async (req: Request, res: Response) => {
   const { firstName, lastName, email } = req.body;
   try {
